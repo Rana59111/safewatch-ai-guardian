@@ -1,0 +1,7 @@
+
+django==5.0.1
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+pillow==10.2.0
+python-dotenv==1.0.0
+djoser==2.2.2
