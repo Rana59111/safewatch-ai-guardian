@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Camera, SquareAlert, Video, VideoOff } from "lucide-react";
+import { Camera, AlertTriangle, Video, VideoOff } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/ui/StatusBadge";
 import { cn } from "@/lib/utils";
@@ -57,7 +57,7 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ camera, onClick, className }) =
           {status === "online" && threatLevel === "high" && (
             <div className="absolute top-0 left-0 right-0 p-2 bg-red-500 bg-opacity-80 text-white flex items-center justify-between">
               <span className="text-xs font-medium flex items-center">
-                <SquareAlert className="h-4 w-4 mr-1" />
+                <AlertTriangle className="h-4 w-4 mr-1" />
                 Threat Detected
               </span>
               <span className="animate-pulse-alert text-xs">Recording</span>
