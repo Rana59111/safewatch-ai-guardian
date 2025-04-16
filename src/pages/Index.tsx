@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "@/components/Layout/Navbar";
 import CameraFeed from "@/components/Dashboard/CameraFeed";
 import ThreatDetection from "@/components/Dashboard/ThreatDetection";
@@ -8,47 +8,26 @@ import SOSButton from "@/components/Dashboard/SOSButton";
 import RiskMap from "@/components/Dashboard/RiskMap";
 import IncidentLog from "@/components/Dashboard/IncidentLog";
 import StatsSummary from "@/components/Dashboard/StatsSummary";
-import { useToast } from "@/components/ui/use-toast";
-import { cameras, alerts as initialAlerts, incidents, riskZones, statistics, generateRandomAlert } from "@/lib/mockData";
 import { Alert } from "@/types";
+import { useCameras } from "@/hooks/useCameras";
+import { useAlerts } from "@/hooks/useAlerts";
+import { useIncidents } from "@/hooks/useIncidents";
+import { useRiskZones } from "@/hooks/useRiskZones";
+import { useStatistics } from "@/hooks/useStatistics";
+import { toast } from "sonner";
 
 const Index = () => {
-  const { toast } = useToast();
-  const [alerts, setAlerts] = useState<Alert[]>(initialAlerts);
-  
-  // Acknowledge an alert
-  const acknowledgeAlert = (id: number) => {
-    setAlerts(prev => 
-      prev.map(alert => 
-        alert.id === id ? { ...alert, acknowledged: true } : alert
-      )
-    );
-    
-    toast({
-      title: "Alert Acknowledged",
-      description: "The alert has been marked as acknowledged.",
-    });
+  // Fetch data using React Query hooks
+  const { cameras, isLoading: camerasLoading } = useCameras();
+  const { alerts, acknowledgeAlert } = useAlerts();
+  const { incidents } = useIncidents();
+  const { zones } = useRiskZones();
+  const { statistics } = useStatistics();
+
+  // Handle acknowledging an alert
+  const handleAcknowledgeAlert = (id: number) => {
+    acknowledgeAlert.mutate(id);
   };
-  
-  // Simulate receiving new alerts periodically
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // 10% chance of generating a new alert every 15 seconds
-      if (Math.random() < 0.1) {
-        const newAlert = generateRandomAlert();
-        setAlerts(prev => [newAlert, ...prev]);
-        
-        // Show toast notification for new alert
-        toast({
-          title: `New ${newAlert.level} Alert`,
-          description: newAlert.description,
-          variant: newAlert.level === "critical" ? "destructive" : "default",
-        });
-      }
-    }, 15000);
-    
-    return () => clearInterval(interval);
-  }, [toast]);
   
   return (
     <div className="min-h-screen bg-gray-50">
@@ -59,7 +38,16 @@ const Index = () => {
         
         {/* Stats Summary */}
         <div className="mb-6">
-          <StatsSummary data={statistics} />
+          <StatsSummary data={statistics || {
+            totalIncidents: 0,
+            resolvedIncidents: 0,
+            averageResponseTime: '0m',
+            activeAlerts: 0,
+            systemStatus: 'Online',
+            camerasOnline: 0,
+            camerasOffline: 0,
+            detectionAccuracy: 0
+          }} />
         </div>
         
         {/* Main Dashboard Grid */}
@@ -67,18 +55,24 @@ const Index = () => {
           {/* Left Column: Camera Feeds */}
           <div className="md:col-span-1 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4">
-              {cameras.map((camera) => (
-                <CameraFeed 
-                  key={camera.id} 
-                  camera={camera} 
-                  onClick={() => {
-                    toast({
-                      title: camera.name,
-                      description: `Location: ${camera.location}`,
-                    });
-                  }}
-                />
-              ))}
+              {camerasLoading ? (
+                <p>Loading cameras...</p>
+              ) : cameras.length === 0 ? (
+                <p>No cameras available</p>
+              ) : (
+                cameras.map((camera) => (
+                  <CameraFeed 
+                    key={camera.id} 
+                    camera={camera} 
+                    onClick={() => {
+                      toast({
+                        title: camera.name,
+                        description: `Location: ${camera.location}`,
+                      });
+                    }}
+                  />
+                ))
+              )}
             </div>
           </div>
           
@@ -87,20 +81,20 @@ const Index = () => {
             <ThreatDetection cameras={cameras} />
             <AlertSystem 
               alerts={alerts} 
-              onAcknowledge={acknowledgeAlert}
+              onAcknowledge={handleAcknowledgeAlert}
             />
           </div>
           
           {/* Right Column: SOS, Risk Map, and Incident Log */}
           <div className="md:col-span-1 space-y-6">
             <SOSButton />
-            <RiskMap zones={riskZones} />
+            <RiskMap zones={zones} />
             <IncidentLog incidents={incidents} />
           </div>
         </div>
       </main>
       
-      <footer className="bg-safewatch-dark text-white py-4 mt-8">
+      <footer className="bg-gray-800 text-white py-4 mt-8">
         <div className="container mx-auto px-4 text-center text-sm">
           <p>SafeWatch AI Guardian System v1.0</p>
           <p className="text-xs mt-1 text-gray-400">Powered by AI and computer vision for enhanced public safety</p>

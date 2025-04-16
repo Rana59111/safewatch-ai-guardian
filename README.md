@@ -1,73 +1,68 @@
-# Welcome to your Lovable project
 
-## Project info
+# SafeWatch AI Guardian System
 
-**URL**: https://lovable.dev/projects/e9a36c31-060a-4ae0-956e-e82ea5a2c9b8
+A comprehensive security monitoring system with AI-enhanced threat detection. This project includes both a React frontend and Django backend.
 
-## How can I edit this code?
+## Frontend Setup
 
-There are several ways of editing your application.
+1. Install dependencies:
+   ```
+   npm install
+   ```
 
-**Use Lovable**
+2. Create a .env file from the example:
+   ```
+   cp .env.example .env
+   ```
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e9a36c31-060a-4ae0-956e-e82ea5a2c9b8) and start prompting.
+3. Start the development server:
+   ```
+   npm run dev
+   ```
 
-Changes made via Lovable will be committed automatically to this repo.
+The frontend will be available at http://localhost:8080
 
-**Use your preferred IDE**
+## Backend Setup
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+See the [backend README](django_backend/README.md) for detailed instructions on setting up the Django backend.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Project Structure
 
-Follow these steps:
+- `/src` - React frontend code
+  - `/api` - API client and services
+  - `/components` - UI components
+  - `/hooks` - React hooks for data fetching
+  - `/pages` - Main application pages
+  
+- `/django_backend` - Django REST API backend
+  - `/api` - Django app with models and views
+  - `/safewatch` - Django project settings
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Features
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Real-time camera monitoring
+- AI-powered threat detection
+- Alert management system
+- Incident logging and response tracking
+- Risk zone mapping
+- Emergency SOS functionality
+- System statistics and performance metrics
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Technologies
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- Frontend: React, TypeScript, TailwindCSS, Tanstack Query
+- Backend: Django, Django REST Framework
+- Data Visualization: Recharts
+- UI Components: shadcn/ui
 
-**Edit a file directly in GitHub**
+## Development
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+To work on both the frontend and backend simultaneously:
 
-**Use GitHub Codespaces**
+1. Start the Django backend server (see backend README)
+2. Start the React frontend development server
+3. The frontend will automatically connect to the backend API
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Screenshot
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/e9a36c31-060a-4ae0-956e-e82ea5a2c9b8) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+![Dashboard Screenshot](https://example.com/screenshot.png)
